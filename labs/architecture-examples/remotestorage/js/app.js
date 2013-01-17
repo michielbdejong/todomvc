@@ -18,17 +18,14 @@
 		this.totalTodo = 0;
 	}
 
-	function paintAll() {
-		computeStats();
-		redrawTodosUI();
-		redrawStatsUI();
-		changeToggleAllCheckboxState();
-	}
-
 	function windowLoadHandler() {
+		console.log('windowLoadHandler 1');
                 remoteStorage.claimAccess({ tasks: 'rw' }).then(function() {
+			console.log('windowLoadHandler 2');
 			remoteStorage.displayWidget('remotestorage-connect');
+			console.log('windowLoadHandler 3');
 			paintAll();
+			console.log('windowLoadHandler 4');
 			addEventListeners();
 
 			remoteStorage.tasks.onChange(paintAll);
@@ -70,7 +67,7 @@
 	function newTodoKeyPressHandler( event ) {
 		if ( event.keyCode === ENTER_KEY ) {
 			var todo = new Todo( document.getElementById('new-todo').value, false );
-			remoteStorage.tasks.setTodo( document.getElementById('new-todo').value, todo );
+			remoteStorage.tasks.setTodo( todo.id, todo );
 		}
 	}
 
@@ -100,7 +97,22 @@
 		remoteStorage.tasks.setTodoCompleted( checkbox.getAttribute('data-todo-id'), checkbox.checked );
 	}
 
-	function computeStats() {
+	function paintAll() {
+		console.log( 'paintAll 1' );
+		remoteStorage.tasks.getTodos().then( function( todosMap ) {
+			var todosArr = [], i;
+			for( i in  todosMap ) {
+				todosArr.push( todosMap[i] );
+			}
+			console.log( 'paintAll 2', todosArr );
+			computeStats( todosArr );
+			redrawTodosUI( todosArr );
+			redrawStatsUI( todosArr );
+			changeToggleAllCheckboxState( todosArr );
+		});
+	}
+
+	function computeStats( todos ) {
 		var i, l;
 
 		stat = new Stat();
@@ -116,7 +128,7 @@
 	}
 
 
-	function redrawTodosUI() {
+	function redrawTodosUI( todos ) {
 
 		var todo, checkbox, label, deleteLink, divDisplay, inputEditTodo, li, i, l,
 			ul = document.getElementById('todo-list');
@@ -182,13 +194,13 @@
 		}
 	}
 
-	function changeToggleAllCheckboxState() {
+	function changeToggleAllCheckboxState( todos ) {
 		var toggleAll = document.getElementById('toggle-all');
 
 		toggleAll.checked = stat.todoCompleted === todos.length;
 	}
 
-	function redrawStatsUI() {
+	function redrawStatsUI( todos ) {
 		removeChildren( document.getElementsByTagName('footer')[0] );
 		document.getElementById('footer').style.display = todos.length ? 'block' : 'none';
 

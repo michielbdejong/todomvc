@@ -6,26 +6,27 @@ remoteStorage.defineModule('tasks', function(privateClient) {
         return privateClient.getAll('todos/');
       },
       setTodo: function(id, todo) {
-        privateClient.storeObject('todos/'+id, todo);
+        console.log('setTodo', id, todo);
+        privateClient.storeObject('todo-list-item', 'todos/'+id, todo);
       },
       setTodoText: function(id, text) {
-        privateClient.getObject('todos/'+id),then(function(obj) {
+        privateClient.getObject('todos/'+id).then(function(obj) {
           obj.text = text;
-          privateClient.storeObject('todos/'+id, obj);
+          privateClient.storeObject('todo-list-item', 'todos/'+id, obj);
         });
       },
       setTodoCompleted: function(id, value) {
-        privateClient.getObject('todos/'+id),then(function(obj) {
+        privateClient.getObject('todos/'+id).then(function(obj) {
           obj.completed = value;
-          privateClient.storeObject('todos/'+id, obj);
+          privateClient.storeObject('todo-list-item', 'todos/'+id, obj);
         });
       },
       setAllTodosCompleted: function(value) {
-        privateClient.getAll('todos/'),then(function(objs) {
+        privateClient.getAll('todos/').then(function(objs) {
           for(var i in objs) {
             if(objs[i].completed != value) {
               objs[i].completed = value;
-              privateClient.storeObject('todos/'+i, objs[i]);
+              privateClient.storeObject('todo-list-item', 'todos/'+i, objs[i]);
             }
           }
         });
@@ -34,7 +35,7 @@ remoteStorage.defineModule('tasks', function(privateClient) {
         privateClient.remove('todos/'+id);
       },
       removeAllCompletedTodos: function() {
-        privateClient.getAll('todos/'),then(function(objs) {
+        privateClient.getAll('todos/').then(function(objs) {
           for(var i in objs) {
             if(objs[i].completed) {
               privateClient.remove('todos/'+i);

@@ -19,23 +19,28 @@
 		this.totalTodo = 0;
 	}
 
+	console.log('defining windowLoadHandler');
 	function windowLoadHandler() {
+		console.log('in windowLoadHandler, calling claimAccess');
                 remoteStorage.claimAccess({ tasks: 'rw' }).then(function() {
+			console.log('in claimAccess promise');
 			remoteStorage.displayWidget('remotestorage-connect');
 			remoteStorage.tasks.onChange(function() {
 				loadTodos().then(function() {
+					console.log('in loadTodos promise');
 					refreshData();
 				});
 			});
-			
+
 			remoteStorage.onWidget('state', function( state ) {
 				if(state == 'disconnected') {
 					todos = [];
 					refreshData();
 				}
 			});
-			
+			console.log('in claimAccess promise, calling loadTodos');
 			loadTodos().then(function() {
+				console.log('in loadTodos promise');
 				refreshData();
 				addEventListeners();
 			});
@@ -111,7 +116,9 @@
 	}
 
 	function loadTodos() {
+		console.log('in loadTodos calling getTodos');
 		return remoteStorage.tasks.getTodos().then( function ( result ) {
+			console.log('in getTodos promise');
 			todos = result;
 		});
 	}

@@ -2,7 +2,9 @@ remoteStorage.defineModule('tasks', function(privateClient) {
   return {
     exports: {
       getTodos: function() {
-        privateClient.getAll('todos/').then(function(objs) {
+        console.log('in getTodos, calling getAll');
+        return privateClient.getAll('todos/').then(function(objs) {
+          console.log('in getAll promise');
           var arr = [];
           for(var i in objs) {
             arr.push(objs[i]);
@@ -11,7 +13,7 @@ remoteStorage.defineModule('tasks', function(privateClient) {
         });
       },
       setTodos: function(todos) {
-        privateClient.getAll('todos/').then(function(existingTodos) {
+        return privateClient.getAll('todos/').then(function(existingTodos) {
           for(var i=0; i<todos.length; i++) {
             if(existingTodos[todos[i].id]) {
               console.log('setTodos:have '+todos[i].id);

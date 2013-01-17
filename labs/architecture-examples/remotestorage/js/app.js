@@ -20,7 +20,7 @@
 	}
 
 	function windowLoadHandler() {
-                remoteStorage.claimAccess({ todos: 'rw' }).then(function() {
+                remoteStorage.claimAccess({ tasks: 'rw' }).then(function() {
 			remoteStorage.displayWidget('remotestorage-connect');
 			remoteStorage.onWidget('ready', function() {
 				loadTodos().then(function() {

@@ -22,13 +22,18 @@
 	function windowLoadHandler() {
                 remoteStorage.claimAccess({ tasks: 'rw' }).then(function() {
 			remoteStorage.displayWidget('remotestorage-connect');
-			remoteStorage.on('change', function() {
-				refreshData();
+			remoteStorage.tasks.onChange(function() {
+				loadTodos().then(function() {
+					refreshData();
+				});
 			});
 			
-			//remoteStorage.on('disconnect', function() {
-			//	refreshData();
-			//});
+			remoteStorage.onWidget('state', function( state ) {
+				if(state == 'disconnected') {
+					todos = [];
+					refreshData();
+				}
+			});
 			
 			loadTodos().then(function() {
 				refreshData();

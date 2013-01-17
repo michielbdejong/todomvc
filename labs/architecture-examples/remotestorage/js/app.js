@@ -23,10 +23,10 @@
                 remoteStorage.claimAccess({ tasks: 'rw' }).then(function() {
 			remoteStorage.displayWidget('remotestorage-connect');
 			remoteStorage.onWidget('ready', function() {
-				loadTodos().then(function() {
-					refreshData();
-					addEventListeners();
-				});
+			});
+			loadTodos().then(function() {
+				refreshData();
+				addEventListeners();
 			});
 		});
 	}
@@ -100,7 +100,7 @@
 	}
 
 	function loadTodos() {
-		return remoteStorage.todos.getTodos().then( function ( result ) {
+		return remoteStorage.tasks.getTodos().then( function ( result ) {
 			todos = result;
 		});
 	}
@@ -167,7 +167,7 @@
 	}
 
 	function saveTodos() {
-		return remoteStorage.todos.setTodos( todos );
+		return remoteStorage.tasks.setTodos( todos );
 	}
 
 	function computeStats() {

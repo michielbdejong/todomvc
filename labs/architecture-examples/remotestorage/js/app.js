@@ -1,8 +1,7 @@
 (function() {
 	'use strict';
 
-	var todos = [],
-		stat = {},
+	var stat = {},
 		ENTER_KEY = 13;
 
 	window.addEventListener( 'load', windowLoadHandler, false );
@@ -19,30 +18,25 @@
 		this.totalTodo = 0;
 	}
 
-	console.log('defining windowLoadHandler');
+	function paintAll() {
+		computeStats();
+		redrawTodosUI();
+		redrawStatsUI();
+		changeToggleAllCheckboxState();
+	}
+
 	function windowLoadHandler() {
-		console.log('in windowLoadHandler, calling claimAccess');
                 remoteStorage.claimAccess({ tasks: 'rw' }).then(function() {
-			console.log('in claimAccess promise');
 			remoteStorage.displayWidget('remotestorage-connect');
-			remoteStorage.tasks.onChange(function() {
-				loadTodos().then(function() {
-					console.log('in loadTodos promise');
-					refreshData();
-				});
-			});
+			paintAll();
+			addEventListeners();
+
+			remoteStorage.tasks.onChange(paintAll);
 
 			remoteStorage.onWidget('state', function( state ) {
 				if(state == 'disconnected') {
-					todos = [];
-					refreshData();
+					paintAll();
 				}
-			});
-			console.log('in claimAccess promise, calling loadTodos');
-			loadTodos().then(function() {
-				console.log('in loadTodos promise');
-				refreshData();
-				addEventListeners();
 			});
 		});
 	}
@@ -59,11 +53,10 @@
 
 		if ( trimmedText ) {
 			if ( event.keyCode === ENTER_KEY ) {
-				editTodo( todoId, trimmedText );
+				remoteStorage.tasks.setTodoText( todoId, trimmedText );
 			}
 		} else {
-			removeTodoById( todoId );
-			refreshData();
+			remoteStorage.tasks.removeTodo( todoId );
 		}
 	}
 
@@ -71,31 +64,26 @@
 		var inputEditTodo = event.target,
 			todoId = event.target.id.slice( 6 );
 
-		editTodo( todoId, inputEditTodo.value );
+		remoteStorage.tasks.setTodoText( todoId, inputEditTodo.value );
 	}
 
 	function newTodoKeyPressHandler( event ) {
 		if ( event.keyCode === ENTER_KEY ) {
-			addTodo( document.getElementById('new-todo').value );
+			var todo = new Todo( document.getElementById('new-todo').value, false );
+			remoteStorage.tasks.setTodo( document.getElementById('new-todo').value, todo );
 		}
 	}
 
 	function toggleAllChangeHandler( event ) {
-		for ( var i in todos ) {
-			todos[ i ].completed = event.target.checked;
-		}
-
-		refreshData();
+		remoteStorage.tasks.setAllTodosCompleted( event.target.checked );
 	}
 
 	function spanDeleteClickHandler( event ) {
-		removeTodoById( event.target.getAttribute('data-todo-id') );
-		refreshData();
+		remoteStorage.tasks.removeTodo( event.target.getAttribute('data-todo-id') );
 	}
 
 	function hrefClearClickHandler() {
-		removeTodosCompleted();
-		refreshData();
+		remoteStorage.tasks.removeAllCompletedTodos();
 	}
 
 	function todoContentHandler( event ) {
@@ -108,84 +96,8 @@
 	}
 
 	function checkboxChangeHandler( event ) {
-		var checkbox = event.target,
-			todo = getTodoById( checkbox.getAttribute('data-todo-id') );
-
-		todo.completed = checkbox.checked;
-		refreshData();
-	}
-
-	function loadTodos() {
-		console.log('in loadTodos calling getTodos');
-		return remoteStorage.tasks.getTodos().then( function ( result ) {
-			console.log('in getTodos promise');
-			todos = result;
-		});
-	}
-
-	function addTodo( text ) {
-		var trimmedText = text.trim();
-
-		if ( trimmedText ) {
-			var todo = new Todo( trimmedText, false );
-			todos.push( todo );
-			refreshData();
-		}
-	}
-
-	function editTodo( todoId, text ) {
-		var i, l;
-
-		for ( i = 0, l = todos.length; i < l; i++ ) {
-			if ( todos[ i ].id === todoId ) {
-				todos[ i ].title = text;
-			}
-		}
-
-		refreshData();
-	}
-
-	function removeTodoById( id ) {
-		var i = todos.length;
-
-		while ( i-- ) {
-			if ( todos[ i ].id === id ) {
-				todos.splice( i, 1 );
-			}
-		}
-	}
-
-	function removeTodosCompleted() {
-		var i = todos.length;
-
-		while ( i-- ) {
-			console.log(i);
-			if ( todos[ i ].completed ) {
-				todos.splice( i, 1 );
-			}
-	   }
-	}
-
-	function getTodoById( id ) {
-		var i, l;
-
-		for ( i = 0, l = todos.length; i < l; i++ ) {
-			if ( todos[ i ].id === id ) {
-				return todos[ i ];
-			}
-		}
-	}
-
-	function refreshData() {
-		saveTodos();//no need to wait for this to finish
-		computeStats();
-		redrawTodosUI();
-		redrawStatsUI();
-		changeToggleAllCheckboxState();
-	}
-
-	function saveTodos() {
-		return remoteStorage.tasks.setTodos( todos );
+		var checkbox = event.target;
+		remoteStorage.tasks.setTodoCompleted( checkbox.getAttribute('data-todo-id'), checkbox.checked );
 	}
 
 	function computeStats() {

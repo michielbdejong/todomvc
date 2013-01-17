@@ -3,29 +3,42 @@ remoteStorage.defineModule('tasks', function(privateClient) {
     exports: {
       getTodos: function() {
         console.log('in getTodos, calling getAll');
-        return privateClient.getAll('todos/').then(function(objs) {
-          console.log('in getAll promise');
-          var arr = [];
-          for(var i in objs) {
-            arr.push(objs[i]);
-          }
-          return arr;
+        return privateClient.getAll('todos/');
+      },
+      setTodo: function(id, todo) {
+        privateClient.storeObject('todos/'+id, todo);
+      },
+      setTodoText: function(id, text) {
+        privateClient.getObject('todos/'+id),then(function(obj) {
+          obj.text = text;
+          privateClient.storeObject('todos/'+id, obj);
         });
       },
-      setTodos: function(todos) {
-        return privateClient.getAll('todos/').then(function(existingTodos) {
-          for(var i=0; i<todos.length; i++) {
-            if(existingTodos[todos[i].id]) {
-              console.log('setTodos:have '+todos[i].id);
-              delete existingTodos[todos[i]];
-            } else {
-              console.log('setTodos:add '+todos[i].id);
-              privateClient.storeObject('todos/'+todos[i].id, todos[i]);
+      setTodoCompleted: function(id, value) {
+        privateClient.getObject('todos/'+id),then(function(obj) {
+          obj.completed = value;
+          privateClient.storeObject('todos/'+id, obj);
+        });
+      },
+      setAllTodosCompleted: function(value) {
+        privateClient.getAll('todos/'),then(function(objs) {
+          for(var i in objs) {
+            if(objs[i].completed != value) {
+              objs[i].completed = value;
+              privateClient.storeObject('todos/'+i, objs[i]);
             }
           }
-          for(var i in existingTodos) {
-            console.log('setTodos:remove '+todos[i].id);
-            privateClient.remove('todos/'+i);
+        });
+      },
+      removeTodo: function(id) {
+        privateClient.remove('todos/'+id);
+      },
+      removeAllCompletedTodos: function() {
+        privateClient.getAll('todos/'),then(function(objs) {
+          for(var i in objs) {
+            if(objs[i].completed) {
+              privateClient.remove('todos/'+i);
+            }
           }
         });
       },

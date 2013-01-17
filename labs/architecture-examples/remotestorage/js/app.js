@@ -56,7 +56,7 @@
 	}
 
 	function newTodoKeyPressHandler( event ) {
-		var trimmedText = document.getElementById('new-todo').value,trim();
+		var trimmedText = document.getElementById('new-todo').value.trim();
 		if ( event.keyCode === ENTER_KEY && trimmedText ) {
 			var todo = new Todo( trimmedText, false );
 			remoteStorage.tasks.setTodo( todo.id, todo );

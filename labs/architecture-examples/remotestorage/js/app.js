@@ -6,12 +6,6 @@
 
 	window.addEventListener( 'load', windowLoadHandler, false );
 
-	function Todo( title, completed ) {
-		this.id = getUuid();
-		this.title = title;
-		this.completed = completed;
-	}
-
 	function Stat() {
 		this.todoLeft = 0;
 		this.todoCompleted = 0;
@@ -58,8 +52,7 @@
 	function newTodoKeyPressHandler( event ) {
 		var trimmedText = document.getElementById('new-todo').value.trim();
 		if ( event.keyCode === ENTER_KEY && trimmedText ) {
-			var todo = new Todo( trimmedText, false );
-			remoteStorage.tasks.setTodo( todo.id, todo );
+			remoteStorage.tasks.addTodo( trimmedText );
 		}
 	}
 
@@ -233,19 +226,5 @@
 
 	function removeChildren( node ) {
 		node.innerHTML = '';
-	}
-
-	function getUuid() {
-		var i, random,
-			uuid = '';
-
-		for ( i = 0; i < 32; i++ ) {
-			random = Math.random() * 16 | 0;
-			if ( i === 8 || i === 12 || i === 16 || i === 20 ) {
-				uuid += '-';
-			}
-			uuid += ( i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random) ).toString( 16 );
-		}
-		return uuid;
 	}
 })();

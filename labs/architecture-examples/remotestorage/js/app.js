@@ -22,8 +22,14 @@
 	function windowLoadHandler() {
                 remoteStorage.claimAccess({ tasks: 'rw' }).then(function() {
 			remoteStorage.displayWidget('remotestorage-connect');
-			remoteStorage.onWidget('ready', function() {
+			remoteStorage.on('change', function() {
+				refreshData();
 			});
+			
+			//remoteStorage.on('disconnect', function() {
+			//	refreshData();
+			//});
+			
 			loadTodos().then(function() {
 				refreshData();
 				addEventListeners();

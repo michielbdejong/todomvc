@@ -19,13 +19,9 @@
 	}
 
 	function windowLoadHandler() {
-		console.log('windowLoadHandler 1');
                 remoteStorage.claimAccess({ tasks: 'rw' }).then(function() {
-			console.log('windowLoadHandler 2');
 			remoteStorage.displayWidget('remotestorage-connect');
-			console.log('windowLoadHandler 3');
 			paintAll();
-			console.log('windowLoadHandler 4');
 			addEventListeners();
 
 			remoteStorage.tasks.onChange(paintAll);
@@ -65,8 +61,9 @@
 	}
 
 	function newTodoKeyPressHandler( event ) {
-		if ( event.keyCode === ENTER_KEY ) {
-			var todo = new Todo( document.getElementById('new-todo').value, false );
+		var trimmedText = document.getElementById('new-todo').value,trim();
+		if ( event.keyCode === ENTER_KEY && trimmedText ) {
+			var todo = new Todo( trimmedText, false );
 			remoteStorage.tasks.setTodo( todo.id, todo );
 		}
 	}
@@ -125,6 +122,7 @@
 		}
 
 		stat.todoLeft = stat.totalTodo - stat.todoCompleted;
+		console.log( stat );
 	}
 
 

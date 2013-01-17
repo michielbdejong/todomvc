@@ -25,12 +25,7 @@
 			addEventListeners();
 
 			remoteStorage.tasks.onChange(paintAll);
-
-			remoteStorage.onWidget('state', function( state ) {
-				if(state == 'disconnected') {
-					paintAll();
-				}
-			});
+			remoteStorage.onWidget('disconnect', paintAll);
 		});
 	}
 

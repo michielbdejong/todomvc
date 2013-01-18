@@ -83,13 +83,11 @@
 	}
 
 	function paintAll() {
-		console.log( 'paintAll 1' );
 		remoteStorage.tasks.getTodos().then( function( todosMap ) {
 			var todosArr = [], i;
 			for( i in  todosMap ) {
 				todosArr.push( todosMap[i] );
 			}
-			console.log( 'paintAll 2', todosArr );
 			computeStats( todosArr );
 			redrawTodosUI( todosArr );
 			redrawStatsUI( todosArr );
@@ -110,7 +108,6 @@
 		}
 
 		stat.todoLeft = stat.totalTodo - stat.todoCompleted;
-		console.log( stat );
 	}
 
 

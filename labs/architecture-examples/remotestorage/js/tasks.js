@@ -65,7 +65,10 @@ remoteStorage.defineModule('tasks', function(privateClient) {
         });
       },
       onChange: function( cb ) {
-        privateClient.on('change', cb);
+        privateClient.on('change', function(event) {
+          console.log('change', event);
+          cb(event.oldValue, event.newValue);
+        });
       }
     }
   };

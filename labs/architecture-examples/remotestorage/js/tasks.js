@@ -33,7 +33,7 @@ remoteStorage.defineModule('tasks', function(privateClient) {
       setTodoText: function(id, text) {
         privateClient.getObject('todos/'+id).then(function(obj) {
           console.log('updating text of item '+id+' from "'+obj.text+'" to "'+text+'"');
-          obj.text = text;
+          obj.title = text;
           privateClient.storeObject('todo-list-item', 'todos/'+id, obj);
         });
       },

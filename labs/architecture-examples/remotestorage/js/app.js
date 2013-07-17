@@ -102,6 +102,8 @@
       redrawTodosUI( todosArr );
       redrawStatsUI( todosArr );
       changeToggleAllCheckboxState( todosArr );
+    }, function(err) {
+      console.log('error during getTodos', err);
     });
   }
 

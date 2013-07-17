@@ -21,6 +21,7 @@ RemoteStorage.defineModule('tasks', function(privateClient, publicClient) {
 
   return {
     exports: {
+      init: init,
       getTodos: function() {
         console.log('in getTodos, calling getAll');
         return privateClient.getAll('todos/');

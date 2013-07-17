@@ -1,4 +1,4 @@
-remoteStorage.defineModule('tasks', function(privateClient) {
+RemoteStorage.defineModule('tasks', function(privateClient) {
   function getUuid() {
     var i, random, uuid = '';
     for (i=0; i<32; i++) {

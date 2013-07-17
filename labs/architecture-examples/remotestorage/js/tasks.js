@@ -35,12 +35,16 @@ RemoteStorage.defineModule('tasks', function(privateClient) {
           console.log('updating text of item '+id+' from "'+obj.text+'" to "'+text+'"');
           obj.title = text;
           privateClient.storeObject('todo-list-item', 'todos/'+id, obj);
+        }, function(err) {
+          console.log('error in setTodoText', err);
         });
       },
       setTodoCompleted: function(id, value) {
         privateClient.getObject('todos/'+id).then(function(obj) {
           obj.completed = value;
           privateClient.storeObject('todo-list-item', 'todos/'+id, obj);
+        }, function(err) {
+          console.log('error in setTodoCompleted', err);
         });
       },
       setAllTodosCompleted: function(value) {
@@ -51,6 +55,8 @@ RemoteStorage.defineModule('tasks', function(privateClient) {
               privateClient.storeObject('todo-list-item', 'todos/'+i, objs[i]);
             }
           }
+        }, function(err) {
+          console.log('error in setAllTodosCompleted', err);
         });
       },
       removeTodo: function(id) {
@@ -63,6 +69,8 @@ RemoteStorage.defineModule('tasks', function(privateClient) {
               privateClient.remove('todos/'+i);
             }
           }
+        }, function(err) {
+          console.log('error in removeAllCompletedTodos', err);
         });
       },
       onChange: function( cb ) {

@@ -19,7 +19,7 @@
     addEventListeners();
 
     remoteStorage.tasks.onChange(paintAll);
-    remoteStorage.onWidget('disconnect', paintAll);
+    remoteStorage.on('disconnect', paintAll);
   }
 
   function addEventListeners() {

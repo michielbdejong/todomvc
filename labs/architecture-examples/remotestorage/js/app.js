@@ -1,3 +1,5 @@
+remoteStorage.enableLog();
+
 (function() {
   'use strict';
 

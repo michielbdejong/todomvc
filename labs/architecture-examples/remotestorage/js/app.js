@@ -14,7 +14,7 @@
 
   function windowLoadHandler() {
     remoteStorage.access.claim({ tasks: 'rw' });
-    remoteStorage.displayWidget('remotestorage-connect');
+    remoteStorage.displayWidget();
     remoteStorage.tasks.init();
     paintAll();
     addEventListeners();

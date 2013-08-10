@@ -88,7 +88,6 @@
       for( i in  todosMap ) {
         todosArr.push( todosMap[i] );
       }
-      console.log('todosArr', todosArr);
       computeStats( todosArr );
       redrawTodosUI( todosArr );
       redrawStatsUI( todosArr );

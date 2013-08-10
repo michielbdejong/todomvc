@@ -23,7 +23,6 @@ RemoteStorage.defineModule('tasks', function(privateClient, publicClient) {
     exports: {
       init: init,
       getTodos: function() {
-        console.log('in getTodos, calling getAll');
         return privateClient.getAll('todos/');
       },
       addTodo: function(text) {
@@ -31,12 +30,10 @@ RemoteStorage.defineModule('tasks', function(privateClient, publicClient) {
         privateClient.storeObject('todo-list-item', 'todos/'+todo.id, todo);
       },
       setTodo: function(id, todo) {
-        console.log('setTodo', id, todo);
         privateClient.storeObject('todo-list-item', 'todos/'+id, todo);
       },
       setTodoText: function(id, text) {
         privateClient.getObject('todos/'+id).then(function(obj) {
-          console.log('updating text of item '+id+' from "'+obj.text+'" to "'+text+'"');
           obj.title = text;
           privateClient.storeObject('todo-list-item', 'todos/'+id, obj);
         }, function(err) {
@@ -79,7 +76,6 @@ RemoteStorage.defineModule('tasks', function(privateClient, publicClient) {
       },
       onChange: function( cb ) {
         privateClient.on('change', function(event) {
-          console.log('change', event);
           cb(event.oldValue, event.newValue);
         });
       }

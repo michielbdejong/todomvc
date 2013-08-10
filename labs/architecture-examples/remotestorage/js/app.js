@@ -35,11 +35,9 @@
 
     if ( trimmedText ) {
       if ( event.keyCode === ENTER_KEY ) {
-        console.log('calling setTodoText on enter in editTodo');
         remoteStorage.tasks.setTodoText( todoId, trimmedText );
       }
     } else {
-      console.log('calling removeTodo because text now empty');
       remoteStorage.tasks.removeTodo( todoId );
     }
   }
@@ -48,30 +46,25 @@
     var inputEditTodo = event.target,
       todoId = event.target.id.slice( 6 );
 
-    console.log('calling setTodoText on blur');
     remoteStorage.tasks.setTodoText( todoId, inputEditTodo.value );
   }
 
   function newTodoKeyPressHandler( event ) {
     var trimmedText = document.getElementById('new-todo').value.trim();
     if ( event.keyCode === ENTER_KEY && trimmedText ) {
-      console.log('calling addTodo on enter in newTodo');
       remoteStorage.tasks.addTodo( trimmedText );
     }
   }
 
   function toggleAllChangeHandler( event ) {
-    console.log('calling setAllTodosCompleted');
     remoteStorage.tasks.setAllTodosCompleted( event.target.checked );
   }
 
   function spanDeleteClickHandler( event ) {
-    console.log('calling removeTodo from deleteClick');
     remoteStorage.tasks.removeTodo( event.target.getAttribute('data-todo-id') );
   }
 
   function hrefClearClickHandler() {
-    console.log('calling removeAllCompletedTodos from clearClick');
     remoteStorage.tasks.removeAllCompletedTodos();
   }
 
@@ -86,12 +79,10 @@
 
   function checkboxChangeHandler( event ) {
     var checkbox = event.target;
-    console.log('calling setTodoCompleted from checkboxChange');
     remoteStorage.tasks.setTodoCompleted( checkbox.getAttribute('data-todo-id'), checkbox.checked );
   }
 
   function paintAll() {
-    console.log('calling getTodos from paintAll');
     remoteStorage.tasks.getTodos().then( function( todosMap ) {
       var todosArr = [], i;
       for( i in  todosMap ) {

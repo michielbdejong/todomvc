@@ -13,7 +13,7 @@
   }
 
   function windowLoadHandler() {
-    remoteStorage.access.claim({ tasks: 'rw' });
+    remoteStorage.access.claim('tasks', 'rw');
     remoteStorage.displayWidget();
     remoteStorage.tasks.init();
     paintAll();

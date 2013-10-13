@@ -1,6 +1,6 @@
 RemoteStorage.defineModule('tasks', function(privateClient, publicClient) {
   function init() {
-    publicClient.cache('', false);//because we're not using the publicClient
+    privateClient.cache('');
   }
   function getUuid() {
     var i, random, uuid = '';

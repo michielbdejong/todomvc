@@ -3677,6 +3677,7 @@ Math.uuid = function (len, radix) {
   }
  
   function synchronize(remote, local, path, options) {
+    console.log('synchronize', path);
     var promise = promising();
     local.get(path).then(function(localStatus, localBody, localContentType, localRevision) {
       remote.get(path, {

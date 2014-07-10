@@ -1,6 +1,15 @@
 RemoteStorage.defineModule('tasks', function(privateClient, publicClient) {
   function init() {
-    privateClient.cache('todos/', true);
+    privateClient.cache('todos/', 'ALL');
+    privateClient.declareType('todo-list-item', {
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+        title: { type: 'string' },
+        completed: { type: 'boolean' }
+      }
+      required: [ 'id', 'title', 'completed' ]
+    });
   }
   function getUuid() {
     var i, random, uuid = '';

@@ -7,7 +7,7 @@ RemoteStorage.defineModule('tasks', function(privateClient, publicClient) {
         id: { type: 'string' },
         title: { type: 'string' },
         completed: { type: 'boolean' }
-      }
+      },
       required: [ 'id', 'title', 'completed' ]
     });
   }

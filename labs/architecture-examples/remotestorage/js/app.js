@@ -13,6 +13,8 @@
   }
 
   function windowLoadHandler() {
+    RemoteStorage.config.logging = true;
+    RemoteStorage.config.changeEvents.window = true;
     remoteStorage.access.claim('tasks', 'rw');
     remoteStorage.displayWidget();
     remoteStorage.tasks.init();
